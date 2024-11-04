@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargement</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            transition: background-color 0.5s; /* Ajout d'une transition pour le fond */
+        }
+        #loading-container {
+            text-align: center;
+            color: #000; /* Couleur par défaut du texte */
+            transition: color 0.5s; /* Ajout d'une transition pour la couleur du texte */
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        #progress {
+            height: 30px;
+            width: 0;
+            background-color: #4caf50;
+            transition: width 0.5s;
+        }
+
+        /* Styles pour le mode sombre */
+        body.dark-mode {
+            background-color: #121212; /* Fond sombre */
+        }
+        body.dark-mode #loading-container {
+            color: #fff; /* Texte en blanc en mode sombre */
+        }
+        body.dark-mode #progress-bar {
+            background-color: #555; /* Fond de la barre de progression en mode sombre */
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-container">
+        <h1>Chargement...</h1>
+        <div id="progress-bar">
+            <div id="progress"></div>
+        </div>
+        <p id="percentage">0%</p>
+    </div>
+
+    <script>
+        // Vérifier si le mode sombre est activé
+        const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode'); // Appliquer le mode sombre
+        }
+
+        // Récupérer le nom de la page suivante à charger
+        const params = new URLSearchParams(window.location.search);
+        const nextPage = params.get('page') || 'index.html'; // Page par défaut
+
+        let progress = 0;
+        const progressBar = document.getElementById('progress');
+        const percentageText = document.getElementById('percentage');
+
+        const loadingInterval = setInterval(() => {
+            if (progress >= 100) {
+                clearInterval(loadingInterval);
+                // Rediriger vers la page suivante
+                window.location.href = nextPage;
+            } else {
+                progress++;
+                progressBar.style.width = progress + '%';
+                percentageText.textContent = progress + '%';
+            }
+        }, 50); // Ajuste le temps d'attente selon tes besoins
+    </script>
+</body>
+</html>
